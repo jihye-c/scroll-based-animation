@@ -9,56 +9,56 @@ function conMeasure(){
     for(let i = 1; i <=container.num; i++){
         let key = i;
         container[key] = {
+            showing :false,
             div : containers[i],
-            top : containers[i-1].getBoundingClientRect().top,
-            bot : containers[i-1].getBoundingClientRect().bottom,
+            top : containers[i-1].getBoundingClientRect().top + window.scrollY,
+            bot : containers[i-1].getBoundingClientRect().bottom + window.scrollY,
         }
         container[key].height = container[key].bot - container[key].top;
         // console.log(`i = ${i}`);
         // console.log(`key = ${key}`);
         // console.log(`container.${key}.bot = ${container[key].bot}`);    
     }
-    // console.log(container);
+    console.log(container);
 }
 conMeasure();
 
+document.addEventListener('scroll',(e)=>{
+    console.log();            
+});
+
 const textAni = {
     init(){
-        // this.splitText();
-        this.io();
+        this.splitText();
     },
     splitText(){
         const originalText = '스크롤에\n따라\n한 글자씩\n나타나는\n인터렉션\n효과';
         const originTextArr = Array.from(originalText);
+        let textArr = [];
 
-        function transferTextArr(arr){
+        function transferTextArr(arr, originVal, changeVal){
             let idx;
             while(idx !== -1){
-                idx = originTextArr.indexOf('\n');
-                console.log(idx);
-                arr[idx] = '<br/>'
+                idx = arr.indexOf(originVal);
+                arr[idx] = changeVal;
             }
+            return arr;
         }
-        transferTextArr(originTextArr);
+        textArr = transferTextArr(originTextArr, '\n', '<br/>');
         
 
         const textBox = document.querySelector('.page1 .text');
         let delay = 0;
-        for(let i = 0; i<originTextArr.length; i++){
-            delay += 200;
-            setTimeout(async()=>{
-                textBox.innerHTML += `${originTextArr[i]}`;
-            },delay);
-        }
-        // setInterval(()=>{
-        //     let i = 0;
-        //     // textBox.innerHTML(originTextArr[i])
-        //     i++
-        //     console.log(originTextArr.length)
-        //     if (i > originTextArr.length ) return;
-        // },200);
-    },
+        // for(let i = 0; i<originTextArr.length; i++){
+        //     delay += 40;
+        //     setTimeout(async()=>{
+        //         textBox.innerHTML += `${originTextArr[i]}`;
+        //     },delay);
+        // }
+        container[1].divideHeight = container[1].height / textArr.length;
+        container[1]
 
+    }
 };
 
 textAni.init();
