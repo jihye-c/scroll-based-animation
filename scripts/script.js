@@ -19,19 +19,16 @@ function conMeasure(){
         // console.log(`key = ${key}`);
         // console.log(`container.${key}.bot = ${container[key].bot}`);    
     }
-    console.log(container);
+    // console.log(container);
 }
 conMeasure();
-
-document.addEventListener('scroll',(e)=>{
-    console.log();            
-});
 
 const textAni = {
     init(){
         this.splitText();
     },
     splitText(){
+        const textBox = document.querySelector('.page1 .text');
         const originalText = '스크롤에\n따라\n한 글자씩\n나타나는\n인터렉션\n효과';
         const originTextArr = Array.from(originalText);
         let textArr = [];
@@ -45,20 +42,35 @@ const textAni = {
             return arr;
         }
         textArr = transferTextArr(originTextArr, '\n', '<br/>');
-        
+        for(let i = 0; i<originTextArr.length; i++){
+                textBox.innerHTML += `<span class='tbox'>${originTextArr[i]}<span>`;
+        }
 
-        const textBox = document.querySelector('.page1 .text');
-        let delay = 0;
-        // for(let i = 0; i<originTextArr.length; i++){
-        //     delay += 40;
-        //     setTimeout(async()=>{
-        //         textBox.innerHTML += `${originTextArr[i]}`;
-        //     },delay);
-        // }
-        container[1].divideHeight = container[1].height / textArr.length;
-        container[1]
+        container[1].divisionHeight = (container[1].height-1000) / textArr.length;
 
     }
 };
-
 textAni.init();
+
+//scroll event
+const tbox = document.querySelectorAll('span.tbox');
+let lastST = 0;
+let direction = '';
+document.addEventListener('scroll',(e)=>{
+    let nowST = window.scrollY;
+    const targetIndex = Math.round((nowST - container[1].top) / container[1].divisionHeight);
+    if(lastST < nowST){
+        direction = 'down'
+        
+        if(targetIndex > -1 && targetIndex < 26){
+            tbox[targetIndex].style.opacity = '1';
+        }
+    }
+    else{
+        direction = 'up'
+        if(targetIndex > -1 && targetIndex < 26){
+            tbox[targetIndex].style.opacity = '0';
+        }
+    }
+    lastST = nowST <= 0 ? 0 : nowST;
+});

@@ -24,3 +24,5 @@ main{background-color: #efefef;}
 .page1 p{
     font-size: 92px; font-weight: 700;
 }
+.page1 p span.tbox {opacity:0;}
+.page1 p span.tbox.on {opacity:1;}
